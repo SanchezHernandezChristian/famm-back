@@ -70,7 +70,7 @@ class UserController extends Controller
             "status" => 0,
             "msg" => "Acerca del perfil de usuario",
             "data" => auth()->user()
-        ]); 
+        ]);
     }
 
     public function login(Request $request)
@@ -83,28 +83,7 @@ class UserController extends Controller
 
             $user = User::where("email", "=", $request->email)->first();
 
-            if (isset($user->id)) {
-                if (Hash::check($request->password, $user->password)) {
-                    //creamos el token
-                    $token = $user->createToken("auth_token")->plainTextToken;
-                    //si está todo ok
-                    return response()->json([
-                        "servEstatus" =>  "OK",
-                        "serverCode" => "200",
-                        "mensaje" => "¡Usuario logueado exitosamente!",
-                        "timeZone" => new Carbon(),
-                        "user" => $user,
-                        "token" => $token
-                    ]);
-                } else {
-                    return response()->json([
-                        "servEstatus" => "FORBIDDEN",
-                        "serverCode" => "403",
-                        "mensaje" => "Credenciales inválidas",
-                        "timeZone" => new Carbon(),
-                    ], 404);
-                }
-            } else {
+            if (!isset($user->id)) {
                 return response()->json([
                     "servEstatus" => "NOT_FOUND",
                     "serverCode" => "404",
@@ -112,6 +91,27 @@ class UserController extends Controller
                     "timeZone" => new Carbon(),
                 ], 404);
             }
+
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    "servEstatus" => "FORBIDDEN",
+                    "serverCode" => "403",
+                    "mensaje" => "Credenciales inválidas",
+                    "timeZone" => new Carbon(),
+                ], 404);
+            }
+
+            //creamos el token
+            $token = $user->createToken("auth_token")->plainTextToken;
+            //si está todo ok
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" => "¡Usuario logueado exitosamente!",
+                "timeZone" => new Carbon(),
+                "user" => $user,
+                "token" => $token
+            ]);
         } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
@@ -124,13 +124,22 @@ class UserController extends Controller
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        try {
+            auth()->user()->tokens()->delete();
 
-        return response()->json([
-            "servEstatus" =>  "OK",
-            "serverCode" => "200",
-            "mensaje" =>  "Sesión cerrada correctamente",
-            "timeZone" => new Carbon(),
-        ]);
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" =>  "Sesión cerrada correctamente",
+                "timeZone" => new Carbon(),
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
     }
 }
