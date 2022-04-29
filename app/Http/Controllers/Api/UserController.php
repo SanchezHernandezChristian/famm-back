@@ -19,7 +19,7 @@ class UserController extends Controller
             'password' => [
                 'required',
                 'min:8',
-                'max:20',
+                'max:10',
                 'regex:/[a-záéíóúñ]/',
                 'regex:/[A-ZÁÉÍÓÚÑ]/',
                 'regex:/[0-9]/',
@@ -29,7 +29,7 @@ class UserController extends Controller
             'password_confirmation' => [
                 'required',
                 'min:8',
-                'max:20',
+                'max:10',
                 'regex:/[a-záéíóúñ]/',
                 'regex:/[A-ZÁÉÍÓÚÑ]/',
                 'regex:/[0-9]/',
