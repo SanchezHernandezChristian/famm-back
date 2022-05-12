@@ -19,7 +19,7 @@ class UserController extends Controller
             'password' => [
                 'required',
                 'min:8',
-                'max:20',
+                'max:15',
                 'regex:/[a-záéíóúñ]/',
                 'regex:/[A-ZÁÉÍÓÚÑ]/',
                 'regex:/[0-9]/',
@@ -29,7 +29,7 @@ class UserController extends Controller
             'password_confirmation' => [
                 'required',
                 'min:8',
-                'max:20',
+                'max:15',
                 'regex:/[a-záéíóúñ]/',
                 'regex:/[A-ZÁÉÍÓÚÑ]/',
                 'regex:/[0-9]/',
@@ -66,10 +66,12 @@ class UserController extends Controller
 
     public function userProfile()
     {
+        $rol = DB::connection('mysql')->table('c_roles')->where('idRol', auth()->user()->idRol)->first();
+
         return response()->json([
             "status" => 0,
             "msg" => "Acerca del perfil de usuario",
-            "data" => auth()->user()
+            "data" => ["Nombre" => auth()->user()->name, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
         ]);
     }
 
@@ -103,13 +105,14 @@ class UserController extends Controller
 
             //creamos el token
             $token = $user->createToken("auth_token")->plainTextToken;
+            $rol = DB::connection('mysql')->table('c_roles')->where('idRol', $user->idRol)->first();
             //si está todo ok
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
                 "mensaje" => "¡Usuario logueado exitosamente!",
                 "timeZone" => new Carbon(),
-                "user" => $user,
+                "user" => ["Nombre" => $user->name, "Email" => $user->email, "Rol" => $rol->nombre_rol],
                 "token" => $token
             ]);
         } catch (\Throwable $th) {
