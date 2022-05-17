@@ -14,12 +14,17 @@ class CursosController extends Controller
     public function all()
     {
         try {
-            return C_cursos::all();
+            $cursos = DB::connection('mysql')
+            ->table('c_cursos')
+            ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
+            ->get(['nombre_curso', 'duracion_horas', 'clave_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
+
+            return $cursos;
         } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
                 "serverCode" => "500",
-                "mensaje" =>  "Error inespera",
+                "mensaje" =>  $th->getMessage(),
                 "timeZone" => new Carbon(),
             ], 500);
         }
@@ -29,22 +34,18 @@ class CursosController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'descripcion' => 'required',
-            'horas_teoricas' => 'required|numeric',
-            'horas_practicas' => 'required|numeric',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'duracion' => 'required|numeric',
+            'clave' => 'required',
+            'idEspecialidad' => 'required',
         ]);
 
         try {
             DB::beginTransaction();
             $curso = new C_cursos();
-            $curso->nombre = $request->nombre;
-            $curso->descripcion = $request->descripcion;
-            $curso->horas_teoricas = $request->horas_teoricas;
-            $curso->horas_practicas = $request->horas_practicas;
-            $curso->fecha_inicio = $request->fecha_inicio;
-            $curso->fecha_fin = $request->fecha_fin;
+            $curso->nombre_curso = $request->nombre;
+            $curso->duración_horas = $request->duracion;
+            $curso->clave_curso = $request->clave;
+            $curso->idEspecialidad = $request->idEspecialidad;
             $curso->save();
             DB::commit();
 
@@ -70,12 +71,10 @@ class CursosController extends Controller
     {
         try {
             $curso = C_cursos::find($request->id);
-            $curso->nombre = $request->nombre;
-            $curso->descripcion = $request->descripcion;
-            $curso->horas_teoricas = $request->horas_teoricas;
-            $curso->horas_practicas = $request->horas_practicas;
-            $curso->fecha_inicio = $request->fecha_inicio;
-            $curso->fecha_fin = $request->fecha_fin;
+            $curso->nombre_curso = $request->nombre;
+            $curso->duracion_horas = $request->duracion;
+            $curso->clave_curso = $request->clave;
+            $curso->idEspecialidad = $request->idEspecialidad;
             $curso->save();
 
             return response()->json([

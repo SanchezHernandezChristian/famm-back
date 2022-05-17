@@ -42,6 +42,7 @@ class UserController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->informacion_complementaria = '0';
             $user->password = Hash::make($request->password);
             $user->save();
             DB::commit();
@@ -112,7 +113,7 @@ class UserController extends Controller
                 "serverCode" => "200",
                 "mensaje" => "¡Usuario logueado exitosamente!",
                 "timeZone" => new Carbon(),
-                "user" => ["Nombre" => $user->name, "Email" => $user->email, "Rol" => $rol->nombre_rol],
+                "user" => ["Nombre" => $user->name, "Email" => $user->email, "EstatusPerfil" => $user->informacion_complementaria, "Rol" => $rol->nombre_rol],
                 "token" => $token
             ]);
         } catch (\Throwable $th) {
