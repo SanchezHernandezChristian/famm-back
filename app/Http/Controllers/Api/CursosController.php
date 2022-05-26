@@ -15,11 +15,16 @@ class CursosController extends Controller
     {
         try {
             $cursos = DB::connection('mysql')
-            ->table('c_cursos')
-            ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
-            ->get(['nombre_curso', 'duracion_horas', 'clave_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
+                ->table('c_cursos')
+                ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
+                ->get(['nombre_curso', 'duracion_horas', 'clave_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
 
-            return $cursos;
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "cursos" =>  $cursos,
+                "timeZone" => new Carbon(),
+            ], 200);;
         } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
