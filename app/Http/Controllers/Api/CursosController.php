@@ -35,6 +35,30 @@ class CursosController extends Controller
         }
     }
 
+    public function get($clave)
+    {
+        try {
+            $curso = DB::connection('mysql')
+                ->table('c_cursos')
+                ->where('clave_curso', $clave)
+                ->first(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'idEspecialidad']);
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "curso" =>  $curso,
+                "timeZone" => new Carbon(),
+            ], 200);;
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
     public function create(Request $request)
     {
         $request->validate([
