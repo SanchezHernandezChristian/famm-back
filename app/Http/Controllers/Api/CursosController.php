@@ -17,7 +17,7 @@ class CursosController extends Controller
             $cursos = DB::connection('mysql')
                 ->table('c_cursos')
                 ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
-                ->get(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
+                ->get(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
 
             return response()->json([
                 "servEstatus" =>  "OK",
@@ -38,18 +38,20 @@ class CursosController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
-            'duracion' => 'required|numeric',
-            'clave' => 'required',
+            'nombre_curso' => 'required',
+            'duracion_horas' => 'required|numeric',
+            'clave_curso' => 'required',
             'idEspecialidad' => 'required',
+            'descripcion_curso' => 'required',
         ]);
 
         try {
             DB::beginTransaction();
             $curso = new C_cursos();
-            $curso->nombre_curso = $request->nombre;
-            $curso->duración_horas = $request->duracion;
-            $curso->clave_curso = $request->clave;
+            $curso->nombre_curso = $request->nombre_curso;
+            $curso->duracion_horas = $request->duracion_horas;
+            $curso->clave_curso = $request->clave_curso;
+            $curso->descripcion_curso = $request->descripcion_curso;
             $curso->idEspecialidad = $request->idEspecialidad;
             $curso->save();
             DB::commit();
@@ -76,9 +78,10 @@ class CursosController extends Controller
     {
         try {
             $curso = C_cursos::find($request->id);
-            $curso->nombre_curso = $request->nombre;
-            $curso->duracion_horas = $request->duracion;
-            $curso->clave_curso = $request->clave;
+            $curso->nombre_curso = $request->nombre_curso;
+            $curso->duracion_horas = $request->duracion_horas;
+            $curso->clave_curso = $request->clave_curso;
+            $curso->descripcion_curso = $request->descripcion_curso;
             $curso->idEspecialidad = $request->idEspecialidad;
             $curso->save();
 
