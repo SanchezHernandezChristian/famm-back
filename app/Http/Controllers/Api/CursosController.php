@@ -17,7 +17,7 @@ class CursosController extends Controller
             $cursos = DB::connection('mysql')
                 ->table('c_cursos')
                 ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
-                ->get(['nombre_curso', 'duracion_horas', 'clave_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
+                ->get(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
 
             return response()->json([
                 "servEstatus" =>  "OK",
@@ -92,7 +92,29 @@ class CursosController extends Controller
             return response()->json([
                 "servEstatus" =>  "ERROR",
                 "serverCode" => "500",
-                "mensaje" =>  "Error inespera",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $curso = C_cursos::find($id);
+            $curso->forcedelete();
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" => "¡Curso eliminado!",
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
                 "timeZone" => new Carbon(),
             ], 500);
         }
