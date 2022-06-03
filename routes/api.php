@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CursosController;
-use App\Http\Controllers\Api\EspecialidadesController;
+use App\Http\Controllers\Api\EspecialidadController;
 use App\Http\Controllers\Api\InformacionAdicionalUsuarioController;
 use App\Http\Controllers\Api\MunicipiosController;
 
@@ -33,7 +33,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::post('additional-user-information', [InformacionAdicionalUsuarioController::class, 'create']);
     Route::put('update-additional-user-information', [InformacionAdicionalUsuarioController::class, 'update']);
     Route::get('all-additional-user-information', [InformacionAdicionalUsuarioController::class, 'all']);
-    Route::get('all-specialty-information', [EspecialidadesController::class, 'all']);
+    Route::get('all-specialty-information', [EspecialidadController::class, 'all']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
