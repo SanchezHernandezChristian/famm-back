@@ -27,14 +27,14 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('logout', [UserController::class, 'logout']);
     Route::post('create-grade', [CursosController::class, 'create']);
     Route::put('update-grade', [CursosController::class, 'update']);
-    Route::get('all-grade', [CursosController::class, 'all']);
     Route::delete('delete-grade/{id}', [CursosController::class, 'update']);
-    Route::get('all-township', [MunicipiosController::class, 'all']);
     Route::post('additional-user-information', [InformacionAdicionalUsuarioController::class, 'create']);
     Route::put('update-additional-user-information', [InformacionAdicionalUsuarioController::class, 'update']);
     Route::get('all-additional-user-information', [InformacionAdicionalUsuarioController::class, 'all']);
-    Route::get('all-specialty-information', [EspecialidadController::class, 'all']);
 });
+Route::get('all-township', [MunicipiosController::class, 'all']);
+Route::get('all-grade', [CursosController::class, 'all']);
+Route::get('all-specialty-information', [EspecialidadController::class, 'all']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
