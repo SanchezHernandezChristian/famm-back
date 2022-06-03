@@ -27,6 +27,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('logout', [UserController::class, 'logout']);
     Route::post('create-grade', [CursosController::class, 'create']);
     Route::put('update-grade', [CursosController::class, 'update']);
+    Route::get('get-grade/{clave_curso}', [CursosController::class, 'get']);
     Route::delete('delete-grade/{id}', [CursosController::class, 'update']);
     Route::post('additional-user-information', [InformacionAdicionalUsuarioController::class, 'create']);
     Route::put('update-additional-user-information', [InformacionAdicionalUsuarioController::class, 'update']);
