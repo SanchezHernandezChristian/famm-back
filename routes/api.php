@@ -4,9 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CursosController;
+use App\Http\Controllers\Api\DiscapacidadController;
+use App\Http\Controllers\Api\EscolaridadController;
 use App\Http\Controllers\Api\EspecialidadController;
 use App\Http\Controllers\Api\InformacionAdicionalUsuarioController;
 use App\Http\Controllers\Api\MunicipiosController;
+use App\Http\Controllers\Api\PerteneceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +39,10 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
 Route::get('all-township', [MunicipiosController::class, 'all']);
 Route::get('all-grade', [CursosController::class, 'all']);
 Route::get('all-specialty-information', [EspecialidadController::class, 'all']);
+
+Route::get('discapacidades', [DiscapacidadController::class, 'all']);
+Route::get('escolaridades', [EscolaridadController::class, 'all']);
+Route::get('pertenece-a', [PerteneceController::class, 'all']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
