@@ -18,7 +18,8 @@ class InformacionAdicionalUsuarioController extends Controller
     {
         try {
             $informacion_adicional = InformacionAdicionalUsuario::where('IdUser', Auth::user()->id)->first();
-            $path = Storage::disk('s3')->url($informacion_adicional->fotografia);
+            // $path = Storage::disk('s3')->url($informacion_adicional->fotografia);
+            $path = "";
             return  response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -43,7 +44,7 @@ class InformacionAdicionalUsuarioController extends Controller
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
             'domicilio' => 'required',
-            'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
+
             'c_Municipio' => 'required',
             'email' => 'required|email',
             'curp' => 'required',
@@ -60,9 +61,10 @@ class InformacionAdicionalUsuarioController extends Controller
             'lengua_indigena' => 'required|numeric',
             'motivo' => 'required',
             'situacion_laboral' => 'required|numeric',
-            'firma_capacitando' => 'required'
-        ]);
 
+        ]);
+        //'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
+        //'firma_capacitando' => 'required'
         try {
             if (Auth::user()->informacion_complementaria == 0) {
                 $folder = "famm";
@@ -74,8 +76,8 @@ class InformacionAdicionalUsuarioController extends Controller
                 $informacion_adicional->apellido_paterno = $request->apellido_paterno;
                 $informacion_adicional->apellido_materno = $request->apellido_materno;
                 $informacion_adicional->domicilio = $request->domicilio;
-                $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
-                $informacion_adicional->fotografia = $image_path;
+                // $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
+                // $informacion_adicional->fotografia = $image_path;
                 $informacion_adicional->c_Municipio = $request->c_Municipio;
                 $informacion_adicional->email = $request->email;
                 $informacion_adicional->curp = $request->curp;
@@ -92,7 +94,7 @@ class InformacionAdicionalUsuarioController extends Controller
                 $informacion_adicional->lengua_indigena = $request->lengua_indigena;
                 $informacion_adicional->motivo = $request->motivo;
                 $informacion_adicional->situacion_laboral = $request->situacion_laboral;
-                $informacion_adicional->firma_capacitando = $request->firma_capacitando;
+                // $informacion_adicional->firma_capacitando = $request->firma_capacitando;
                 $informacion_adicional->save();
                 DB::commit();
 
@@ -136,11 +138,11 @@ class InformacionAdicionalUsuarioController extends Controller
                 if ($request->apellido_materno) $informacion_adicional->apellido_materno = $request->apellido_materno;
                 if ($request->domicilio) $informacion_adicional->domicilio = $request->domicilio;
 
-                if ($request->fotografia) {
-                    Storage::disk('s3')->delete($informacion_adicional->fotografia);
-                    $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
-                    $informacion_adicional->fotografia = $image_path;
-                }
+                // if ($request->fotografia) {
+                //     Storage::disk('s3')->delete($informacion_adicional->fotografia);
+                //     $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
+                //     $informacion_adicional->fotografia = $image_path;
+                // }
 
                 if ($request->c_Municipio) $informacion_adicional->c_Municipio = $request->c_Municipio;
                 if ($request->email) $informacion_adicional->email = $request->email;
@@ -158,7 +160,7 @@ class InformacionAdicionalUsuarioController extends Controller
                 if ($request->lengua_indigena) $informacion_adicional->lengua_indigena = $request->lengua_indigena;
                 if ($request->motivo) $informacion_adicional->motivo = $request->motivo;
                 if ($request->situacion_laboral) $informacion_adicional->situacion_laboral = $request->situacion_laboral;
-                if ($request->firma_capacitando) $informacion_adicional->firma_capacitando = $request->firma_capacitando;
+                // if ($request->firma_capacitando) $informacion_adicional->firma_capacitando = $request->firma_capacitando;
                 $informacion_adicional->save();
 
                 return response()->json([
