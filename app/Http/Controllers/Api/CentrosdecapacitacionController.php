@@ -2,29 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Models\C_centrosdecapacitacion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\Http\Controllers\Controller;
-use App\Models\C_cursos;
-
-class CursosController extends Controller
+class CentrosdecapacitacionController extends Controller
 {
     public function all()
     {
         try {
-            $cursos = DB::connection('mysql')
-                ->table('c_cursos')
-                ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
-                ->get(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
-
+            $centro_capacitacion = C_centrosdecapacitacion::all();
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "cursos" =>  $cursos,
+                "data" =>  $centro_capacitacion,
                 "timeZone" => new Carbon(),
-            ], 200);;
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
@@ -35,18 +30,14 @@ class CursosController extends Controller
         }
     }
 
-    public function get($clave)
+    public function get($id)
     {
         try {
-            $curso = DB::connection('mysql')
-                ->table('c_cursos')
-                ->where('clave_curso', 'LIKE', "%$clave%")
-                ->first(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'idEspecialidad']);
-
+            $centro_capacitacion = C_centrosdecapacitacion::find($id);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "curso" =>  $curso,
+                "data" =>  $centro_capacitacion,
                 "timeZone" => new Carbon(),
             ], 200);;
         } catch (\Throwable $th) {
@@ -62,28 +53,28 @@ class CursosController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'nombre_curso' => 'required',
-            'duracion_horas' => 'required|numeric',
-            'clave_curso' => 'required',
-            'idEspecialidad' => 'required',
-            'descripcion_curso' => 'required',
+            'nombre' => 'required',
+            'director' => 'required|numeric',
+            'telefono' => 'required|min:10|max:10',
+            'direccion' => 'required',
+            'tipo' => 'required',
         ]);
 
         try {
             DB::beginTransaction();
-            $curso = new C_cursos();
-            $curso->nombre_curso = $request->nombre_curso;
-            $curso->duracion_horas = $request->duracion_horas;
-            $curso->clave_curso = $request->clave_curso;
-            $curso->descripcion_curso = $request->descripcion_curso;
-            $curso->idEspecialidad = $request->idEspecialidad;
-            $curso->save();
+            $centro_capacitacion = new C_centrosdecapacitacion();
+            $centro_capacitacion->nombre = $request->nombre;
+            $centro_capacitacion->director = $request->director;
+            $centro_capacitacion->telefono = $request->telefono;
+            $centro_capacitacion->direccion = $request->direccion;
+            $centro_capacitacion->tipo = $request->tipo;
+            $centro_capacitacion->save();
             DB::commit();
 
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Registro de curso exitoso!",
+                "mensaje" => "¡Registro exitoso!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
@@ -102,23 +93,24 @@ class CursosController extends Controller
     {
         try {
             DB::beginTransaction();
-            $curso = C_cursos::find($request->id);
-            $curso->nombre_curso = $request->nombre_curso;
-            $curso->duracion_horas = $request->duracion_horas;
-            $curso->clave_curso = $request->clave_curso;
-            $curso->descripcion_curso = $request->descripcion_curso;
-            $curso->idEspecialidad = $request->idEspecialidad;
-            $curso->save();
+            $centro_capacitacion = C_centrosdecapacitacion::find($request->id);
+            if ($request->nombre_curso) $centro_capacitacion->nombre = $request->nombre;
+            if ($request->nombre_curso) $centro_capacitacion->director = $request->director;
+            if ($request->nombre_curso) $centro_capacitacion->telefono = $request->telefono;
+            if ($request->nombre_curso) $centro_capacitacion->direccion = $request->direccion;
+            if ($request->nombre_curso) $centro_capacitacion->tipo = $request->tipo;
+            $centro_capacitacion->save();
             DB::commit();
 
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Curso actualizado!",
+                "mensaje" => "¡Centro de capacitación actualizado!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json([
                 "servEstatus" =>  "ERROR",
                 "serverCode" => "500",
@@ -132,13 +124,14 @@ class CursosController extends Controller
     {
         try {
             DB::beginTransaction();
-            $curso = C_cursos::find($id);
-            $curso->forcedelete();
+            $centro_capacitacion = C_centrosdecapacitacion::find($id);
+            $centro_capacitacion->delete();
             DB::commit();
+
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Curso eliminado!",
+                "mensaje" => "¡Centro de capacitación eliminado!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
