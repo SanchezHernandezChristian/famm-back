@@ -41,6 +41,7 @@ class CursosController extends Controller
             $curso = DB::connection('mysql')
                 ->table('c_cursos')
                 ->where('clave_curso', 'LIKE', "%$clave%")
+                ->whereNull('deleted_at')
                 ->first(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'idEspecialidad']);
 
             return response()->json([
@@ -103,11 +104,11 @@ class CursosController extends Controller
         try {
             DB::beginTransaction();
             $curso = C_cursos::find($request->id);
-            $curso->nombre_curso = $request->nombre_curso;
-            $curso->duracion_horas = $request->duracion_horas;
-            $curso->clave_curso = $request->clave_curso;
-            $curso->descripcion_curso = $request->descripcion_curso;
-            $curso->idEspecialidad = $request->idEspecialidad;
+            if ($request->nombre_curso) $curso->nombre_curso = $request->nombre_curso;
+            if ($request->duracion_horas) $curso->duracion_horas = $request->duracion_horas;
+            if ($request->clave_curso) $curso->clave_curso = $request->clave_curso;
+            if ($request->descripcion_curso) $curso->descripcion_curso = $request->descripcion_curso;
+            if ($request->idEspecialidad) $curso->idEspecialidad = $request->idEspecialidad;
             $curso->save();
             DB::commit();
 
@@ -133,7 +134,7 @@ class CursosController extends Controller
         try {
             DB::beginTransaction();
             $curso = C_cursos::find($id);
-            $curso->forcedelete();
+            $curso->delete();
             DB::commit();
             return response()->json([
                 "servEstatus" =>  "OK",

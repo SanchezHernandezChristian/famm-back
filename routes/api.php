@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\EspecialidadController;
 use App\Http\Controllers\Api\InformacionAdicionalUsuarioController;
 use App\Http\Controllers\Api\MunicipiosController;
 use App\Http\Controllers\Api\PerteneceController;
+use App\Http\Controllers\Api\RolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,21 +31,26 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('logout', [UserController::class, 'logout']);
 
     Route::get('user-profile', [UserController::class, 'userProfile']);
+    Route::put('update-profile', [UserController::class, 'update']);
+    Route::delete('delete-profile/{id}', [UserController::class, 'destroy']);
+    Route::get('users', [UserController::class, 'all']);
 
     Route::post('create-grade', [CursosController::class, 'create']);
     Route::put('update-grade', [CursosController::class, 'update']);
     Route::get('get-grade/{clave_curso}', [CursosController::class, 'get']);
-    Route::delete('delete-grade/{id}', [CursosController::class, 'update']);
+    Route::delete('delete-grade/{id}', [CursosController::class, 'destroy']);
 
     Route::post('additional-user-information', [InformacionAdicionalUsuarioController::class, 'create']);
     Route::put('update-additional-user-information', [InformacionAdicionalUsuarioController::class, 'update']);
     Route::get('all-additional-user-information', [InformacionAdicionalUsuarioController::class, 'all']);
-    
+
     Route::get('all-training-center', [CentrosdecapacitacionController::class, 'all']);
     Route::post('add-training-center', [CentrosdecapacitacionController::class, 'create']);
     Route::delete('delete-training-center/{id}', [CentrosdecapacitacionController::class, 'destroy']);
     Route::put('update-training-center', [CentrosdecapacitacionController::class, 'update']);
     Route::get('get-training-center/{id}', [CentrosdecapacitacionController::class, 'get']);
+
+    Route::get('all-roles', [RolesController::class, 'all']);
 });
 
 Route::get('all-township', [MunicipiosController::class, 'all']);
