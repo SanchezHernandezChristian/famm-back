@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function all()
+    {
+        try {
+            $users = DB::connection('mysql')
+                ->table('users')->whereNull('deleted_at')->where("idRol", '!=', 3)->get(["id", "nombres", "apellidos", "email", "user_name", "idRol"]);
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "data" =>  $users,
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -20,22 +41,31 @@ class UserController extends Controller
                 'required',
                 'min:8',
                 'max:15',
+                'regex:/[a-záéíóúñ]/',
+                'regex:/[A-ZÁÉÍÓÚÑ]/',
+                'regex:/[0-9]/',
                 'confirmed'
             ],
             'password_confirmation' => [
                 'required',
                 'min:8',
                 'max:15',
+                'regex:/[a-záéíóúñ]/',
+                'regex:/[A-ZÁÉÍÓÚÑ]/',
+                'regex:/[0-9]/'
             ],
         ]);
 
         try {
             DB::beginTransaction();
             $user = new User();
-            $user->name = $request->name;
+            $user->nombres = $request->name;
+            if ($request->apellidos) $user->apellidos = $request->apellidos;
+            if ($request->user_name) $user->user_name = $request->user_name;
             $user->email = $request->email;
             $user->informacion_complementaria = '0';
             $user->password = Hash::make($request->password);
+            if ($request->idRol) $user->idRol = $request->idRol;
             $user->save();
             DB::commit();
 
@@ -57,6 +87,88 @@ class UserController extends Controller
         }
     }
 
+    public function update(Request $request)
+    {
+        if ($request->email) {
+            $request->validate([
+                'email' => 'email|unique:users',
+            ]);
+        }
+
+        if ($request->password) {
+            $request->validate([
+                'password' => [
+                    'min:8',
+                    'max:15',
+                    'regex:/[a-záéíóúñ]/',
+                    'regex:/[A-ZÁÉÍÓÚÑ]/',
+                    'regex:/[0-9]/',
+                    'confirmed'
+                ],
+                'password_confirmation' => [
+                    'min:8',
+                    'max:15',
+                    'regex:/[a-záéíóúñ]/',
+                    'regex:/[A-ZÁÉÍÓÚÑ]/',
+                    'regex:/[0-9]/'
+                ],
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+            $user = User::find($request->id);
+            if ($request->name) $user->nombres = $request->name;
+            if ($request->apellidos) $user->apellidos = $request->apellidos;
+            if ($request->user_name) $user->user_name = $request->user_name;
+            if ($request->email) $user->email = $request->email;
+            if ($request->password) $user->password = Hash::make($request->password);
+            if ($request->idRol) $user->idRol = $request->idRol;
+            $user->save();
+            DB::commit();
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" => "¡Usuario actualizado!",
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json([
+                "servEstatus" =>  "NOT_FOUND",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            $user = User::find($id);
+            $user->delete();
+            DB::commit();
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" => "¡Usuario eliminado!",
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
     public function userProfile()
     {
         $rol = DB::connection('mysql')->table('c_roles')->where('idRol', auth()->user()->idRol)->first();
@@ -64,7 +176,7 @@ class UserController extends Controller
         return response()->json([
             "status" => 0,
             "msg" => "Acerca del perfil de usuario",
-            "data" => ["Nombre" => auth()->user()->name, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
+            "data" => ["nombres" => auth()->user()->nombres, "apellidos" => auth()->user()->apellidos, "user_name" => auth()->user()->user_name, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
         ]);
     }
 

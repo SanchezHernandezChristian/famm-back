@@ -54,7 +54,7 @@ class CentrosdecapacitacionController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'director' => 'required|numeric',
+            'director' => 'required',
             'telefono' => 'required|min:10|max:10',
             'direccion' => 'required',
             'tipo' => 'required',
@@ -94,11 +94,11 @@ class CentrosdecapacitacionController extends Controller
         try {
             DB::beginTransaction();
             $centro_capacitacion = C_centrosdecapacitacion::find($request->id);
-            if ($request->nombre_curso) $centro_capacitacion->nombre = $request->nombre;
-            if ($request->nombre_curso) $centro_capacitacion->director = $request->director;
-            if ($request->nombre_curso) $centro_capacitacion->telefono = $request->telefono;
-            if ($request->nombre_curso) $centro_capacitacion->direccion = $request->direccion;
-            if ($request->nombre_curso) $centro_capacitacion->tipo = $request->tipo;
+            if ($request->nombre) $centro_capacitacion->nombre = $request->nombre;
+            if ($request->director) $centro_capacitacion->director = $request->director;
+            if ($request->telefono) $centro_capacitacion->telefono = $request->telefono;
+            if ($request->direccion) $centro_capacitacion->direccion = $request->direccion;
+            if ($request->tipo) $centro_capacitacion->tipo = $request->tipo;
             $centro_capacitacion->save();
             DB::commit();
 
