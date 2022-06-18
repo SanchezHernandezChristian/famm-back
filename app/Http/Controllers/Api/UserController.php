@@ -15,7 +15,36 @@ class UserController extends Controller
     {
         try {
             $users = DB::connection('mysql')
-                ->table('users')->whereNull('deleted_at')->where("idRol", '!=', 3)->get(["id", "nombres", "apellidos", "email", "user_name", "idRol"]);
+                ->table('users')
+                ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
+                ->whereNull('users.deleted_at')
+                ->where("users.id", '!=', auth()->user()->id)
+                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol"]);
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "data" =>  $users,
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
+    public function getUser($id)
+    {
+        try {
+            $users = DB::connection('mysql')
+                ->table('users')
+                ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
+                ->whereNull('users.deleted_at')
+                ->where("users.id", $id)
+                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
