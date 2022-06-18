@@ -34,6 +34,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::put('update-profile', [UserController::class, 'update']);
     Route::delete('delete-profile/{id}', [UserController::class, 'destroy']);
     Route::get('users', [UserController::class, 'all']);
+    Route::get('get-user/{id}', [UserController::class, 'getUser']);
 
     Route::post('create-grade', [CursosController::class, 'create']);
     Route::put('update-grade', [CursosController::class, 'update']);
