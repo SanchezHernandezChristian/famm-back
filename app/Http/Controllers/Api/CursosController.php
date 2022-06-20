@@ -18,7 +18,7 @@ class CursosController extends Controller
                 ->table('c_cursos')
                 ->leftJoin('c_especialidad', 'c_cursos.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
                 ->whereNull('c_cursos.deleted_at')
-                ->get(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector']);
+                ->get(['idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'c_cursos.idEspecialidad', 'nombre_especialidad', 'clave_especialidad', 'campo_formacion', 'subsector', 'sector', 'c_cursos.created_at']);
 
             return response()->json([
                 "servEstatus" =>  "OK",
