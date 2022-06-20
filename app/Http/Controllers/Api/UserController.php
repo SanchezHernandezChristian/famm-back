@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformacionAdicionalUsuario;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -178,6 +179,7 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
+            InformacionAdicionalUsuario::where('IdUser', $id)->delete();
             $user = User::find($id);
             $user->delete();
             DB::commit();

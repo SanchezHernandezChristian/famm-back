@@ -134,11 +134,6 @@ class EspecialidadController extends Controller
         try {
             DB::beginTransaction();
             $cursos = C_cursos::where('idEspecialidad', $id)->whereNull('deleted_at')->get();
-            // $especialidades = DB::connection('mysql')
-            //     ->table('c_cursos')
-            //     ->where('idEspecialidad', $id)
-            //     ->whereNull('deleted_at')
-            //     ->get();
 
             if (isset($cursos[0])) {
                 $code = 403;
