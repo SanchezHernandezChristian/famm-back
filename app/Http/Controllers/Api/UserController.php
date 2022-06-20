@@ -19,7 +19,7 @@ class UserController extends Controller
                 ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
                 ->whereNull('users.deleted_at')
                 ->where("users.id", '!=', auth()->user()->id)
-                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol"]);
+                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol", "created_at"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
