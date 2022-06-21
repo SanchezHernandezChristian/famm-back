@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CursosController;
 use App\Http\Controllers\Api\DiscapacidadController;
+use App\Http\Controllers\Api\DocenteController;
 use App\Http\Controllers\Api\EscolaridadController;
 use App\Http\Controllers\Api\EspecialidadController;
 use App\Http\Controllers\Api\InformacionAdicionalUsuarioController;
@@ -52,6 +53,17 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('get-training-center/{id}', [CentrosdecapacitacionController::class, 'get']);
 
     Route::get('all-roles', [RolesController::class, 'all']);
+
+    Route::get('get-specialty/{id}', [EspecialidadController::class, 'get']);
+    Route::post('create-specialty', [EspecialidadController::class, 'create']);
+    Route::put('update-specialty', [EspecialidadController::class, 'update']);
+    Route::delete('delete-specialty/{id}', [EspecialidadController::class, 'destroy']);
+
+    Route::get('all-teacher', [DocenteController::class, 'all']);
+    Route::get('get-teacher/{id}', [DocenteController::class, 'get']);
+    Route::post('create-teacher', [DocenteController::class, 'create']);
+    Route::put('update-teacher', [DocenteController::class, 'update']);
+    Route::delete('delete-teacher/{id}', [DocenteController::class, 'destroy']);
 });
 
 Route::get('all-township', [MunicipiosController::class, 'all']);
