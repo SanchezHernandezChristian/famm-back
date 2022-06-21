@@ -248,7 +248,7 @@ class UserController extends Controller
                 "serverCode" => "200",
                 "mensaje" => "¡Usuario logueado exitosamente!",
                 "timeZone" => new Carbon(),
-                "user" => ["Nombre" => $user->name, "Email" => $user->email, "EstatusPerfil" => $user->informacion_complementaria, "Rol" => $rol->nombre_rol],
+                "user" => ["Nombre" => $user->nombres, "Email" => $user->email, "EstatusPerfil" => $user->informacion_complementaria, "Rol" => $rol->nombre_rol],
                 "token" => $token
             ]);
         } catch (\Throwable $th) {
