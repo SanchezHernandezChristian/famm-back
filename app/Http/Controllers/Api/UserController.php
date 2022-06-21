@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformacionAdicionalUsuario;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class UserController extends Controller
                 ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
                 ->whereNull('users.deleted_at')
                 ->where("users.id", '!=', auth()->user()->id)
-                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol"]);
+                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol", "created_at"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -178,6 +179,7 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
+            InformacionAdicionalUsuario::where('IdUser', $id)->delete();
             $user = User::find($id);
             $user->delete();
             DB::commit();
