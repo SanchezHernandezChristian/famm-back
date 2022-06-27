@@ -43,7 +43,6 @@ class InformacionAdicionalUsuarioController extends Controller
             'nombre' => 'required',
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
-            'domicilio' => 'required',
 
             'c_Municipio' => 'required',
             'email' => 'required|email',
@@ -75,7 +74,12 @@ class InformacionAdicionalUsuarioController extends Controller
                 $informacion_adicional->nombre = $request->nombre;
                 $informacion_adicional->apellido_paterno = $request->apellido_paterno;
                 $informacion_adicional->apellido_materno = $request->apellido_materno;
-                $informacion_adicional->domicilio = $request->domicilio;
+                $informacion_adicional->calle = $request->calle;
+                $informacion_adicional->numero = $request->numero;
+                $informacion_adicional->colonia = $request->colonia;
+                $informacion_adicional->localidad = $request->localidad;
+                $informacion_adicional->cp = $request->cp;
+
                 // $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
                 // $informacion_adicional->fotografia = $image_path;
                 $informacion_adicional->c_Municipio = $request->c_Municipio;
@@ -136,7 +140,11 @@ class InformacionAdicionalUsuarioController extends Controller
                 if ($request->nombre) $informacion_adicional->nombre = $request->nombre;
                 if ($request->apellido_paterno) $informacion_adicional->apellido_paterno = $request->apellido_paterno;
                 if ($request->apellido_materno) $informacion_adicional->apellido_materno = $request->apellido_materno;
-                if ($request->domicilio) $informacion_adicional->domicilio = $request->domicilio;
+                if ($request->calle) $informacion_adicional->calle = $request->calle;
+                if ($request->numero) $informacion_adicional->numero = $request->numero;
+                if ($request->colonia) $informacion_adicional->colonia = $request->colonia;
+                if ($request->localidad) $informacion_adicional->localidad = $request->localidad;
+                if ($request->cp) $informacion_adicional->cp = $request->cp;
 
                 // if ($request->fotografia) {
                 //     Storage::disk('s3')->delete($informacion_adicional->fotografia);
