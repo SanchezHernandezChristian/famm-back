@@ -129,6 +129,7 @@ class DocenteController extends Controller
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
                 "mensaje" => "¡Docente registrado con exito!",
+                "data" => $docente->idDocente,
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
