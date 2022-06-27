@@ -20,7 +20,7 @@ class UserController extends Controller
                 ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
                 ->whereNull('users.deleted_at')
                 ->where("users.id", '!=', auth()->user()->id)
-                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol", "created_at"]);
+                ->get(["users.id", "nombres", "primer_apellido", "segundo_apellido", "email", "user_name", "users.idRol", "nombre_rol", "created_at"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -45,7 +45,7 @@ class UserController extends Controller
                 ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
                 ->whereNull('users.deleted_at')
                 ->where("users.id", $id)
-                ->get(["users.id", "nombres", "apellidos", "email", "user_name", "users.idRol", "nombre_rol"]);
+                ->get(["users.id", "nombres", "primer_apellido", "segundo_apellido", "email", "user_name", "users.idRol", "nombre_rol"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -66,6 +66,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'primer_apellido' => 'required',
             'email' => 'required|email|unique:users',
             'password' => [
                 'required',
@@ -90,7 +91,8 @@ class UserController extends Controller
             DB::beginTransaction();
             $user = new User();
             $user->nombres = $request->name;
-            if ($request->apellidos) $user->apellidos = $request->apellidos;
+            $user->primer_apellido = $request->primer_apellido;
+            if ($request->segundo_apellido) $user->segundo_apellido = $request->segundo_apellido;
             if ($request->user_name) $user->user_name = $request->user_name;
             $user->email = $request->email;
             $user->informacion_complementaria = '0';
@@ -149,7 +151,8 @@ class UserController extends Controller
             DB::beginTransaction();
             $user = User::find($request->id);
             if ($request->name) $user->nombres = $request->name;
-            if ($request->apellidos) $user->apellidos = $request->apellidos;
+            if ($request->primer_apellido) $user->primer_apellido = $request->primer_apellido;
+            if ($request->segundo_apellido) $user->segundo_apellido = $request->segundo_apellido;
             if ($request->user_name) $user->user_name = $request->user_name;
             if ($request->email) $user->email = $request->email;
             if ($request->password) $user->password = Hash::make($request->password);
@@ -207,7 +210,7 @@ class UserController extends Controller
         return response()->json([
             "status" => 0,
             "msg" => "Acerca del perfil de usuario",
-            "data" => ["nombres" => auth()->user()->nombres, "apellidos" => auth()->user()->apellidos, "user_name" => auth()->user()->user_name, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
+            "data" => ["nombres" => auth()->user()->nombres, "primer_apellido" => auth()->user()->primer_apellido, "segundo_apellido" => auth()->user()->segundo_apellido, "user_name" => auth()->user()->user_name, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
         ]);
     }
 

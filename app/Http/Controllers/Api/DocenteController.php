@@ -60,10 +60,8 @@ class DocenteController extends Controller
             'nombre' => 'required',
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
-            'domicilio' => 'required',
 
             'c_Municipio' => 'required',
-            'email' => 'required|email',
             'curp' => 'required',
             'sexo' => 'required',
             'fecha_nacimiento' => 'required|date',
@@ -71,15 +69,25 @@ class DocenteController extends Controller
             'edad' => 'required|numeric',
             'estado_civil' => 'required',
             'telefono' => 'required|numeric',
-            'grupo_vulnerable' => 'required|numeric',
-            'idDiscapacidad' => 'required|numeric',
-            'idPertenece' => 'required|numeric',
             'idEscolaridad' => 'required|numeric',
             'lengua_indigena' => 'required|numeric',
             'motivo' => 'required',
             'situacion_laboral' => 'required|numeric',
 
         ]);
+
+        if ($request->grupo_vulnerable) {
+            $request->validate(['grupo_vulnerable' => 'required|numeric']);
+        }
+
+        if ($request->idDiscapacidad) {
+            $request->validate(['idDiscapacidad' => 'required|numeric']);
+        }
+
+        if ($request->idPertenece) {
+            $request->validate(['idPertenece' => 'required|numeric']);
+        }
+
         //'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
         //'firma_capacitando' => 'required'
         try {
@@ -90,11 +98,14 @@ class DocenteController extends Controller
             $docente->nombre = $request->nombre;
             $docente->apellido_paterno = $request->apellido_paterno;
             $docente->apellido_materno = $request->apellido_materno;
-            $docente->domicilio = $request->domicilio;
+            $docente->calle = $request->calle;
+            $docente->numero = $request->numero;
+            $docente->colonia = $request->colonia;
+            $docente->localidad = $request->localidad;
+            $docente->cp = $request->cp;
             // $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
             // $docente->fotografia = $image_path;
             $docente->c_Municipio = $request->c_Municipio;
-            $docente->email = $request->email;
             $docente->curp = $request->curp;
             $docente->sexo = $request->sexo;
             $docente->fecha_nacimiento = $request->fecha_nacimiento;
@@ -102,9 +113,10 @@ class DocenteController extends Controller
             $docente->edad = $request->edad;
             $docente->estado_civil = $request->estado_civil;
             $docente->telefono = $request->telefono;
-            $docente->grupo_vulnerable = $request->grupo_vulnerable;
-            $docente->idDiscapacidad = $request->idDiscapacidad;
-            $docente->idPertenece = $request->idPertenece;
+            if ($request->grupo_vulnerable) $docente->grupo_vulnerable = $request->grupo_vulnerable;
+            if ($request->idDiscapacidad) $docente->idDiscapacidad = $request->idDiscapacidad;
+            if ($request->idPertenece) $docente->idPertenece = $request->idPertenece;
+
             $docente->idEscolaridad = $request->idEscolaridad;
             $docente->lengua_indigena = $request->lengua_indigena;
             $docente->motivo = $request->motivo;
@@ -138,7 +150,11 @@ class DocenteController extends Controller
             if ($request->nombre) $docente->nombre = $request->nombre;
             if ($request->apellido_paterno) $docente->apellido_paterno = $request->apellido_paterno;
             if ($request->apellido_materno) $docente->apellido_materno = $request->apellido_materno;
-            if ($request->domicilio) $docente->domicilio = $request->domicilio;
+            if ($request->calle) $docente->calle = $request->calle;
+            if ($request->numero) $docente->numero = $request->numero;
+            if ($request->colonia) $docente->colonia = $request->colonia;
+            if ($request->localidad) $docente->localidad = $request->localidad;
+            if ($request->cp) $docente->cp = $request->cp;
 
             // if ($request->fotografia) {
             //     Storage::disk('s3')->delete($docente->fotografia);
@@ -147,7 +163,6 @@ class DocenteController extends Controller
             // }
 
             if ($request->c_Municipio) $docente->c_Municipio = $request->c_Municipio;
-            if ($request->email) $docente->email = $request->email;
             if ($request->curp) $docente->curp = $request->curp;
             if ($request->sexo) $docente->sexo = $request->sexo;
             if ($request->fecha_nacimiento) $docente->fecha_nacimiento = $request->fecha_nacimiento;
