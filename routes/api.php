@@ -61,7 +61,9 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
 
     Route::get('all-teacher', [DocenteController::class, 'all']);
     Route::get('get-teacher/{id}', [DocenteController::class, 'get']);
-    Route::post('create-teacher', [DocenteController::class, 'create']);
+    Route::post('create-teacher-p1', [DocenteController::class, 'pagina_1']);
+    Route::post('create-teacher-p2', [DocenteController::class, 'pagina_2']);
+    Route::post('create-teacher-p3', [DocenteController::class, 'pagina_2']);
     Route::put('update-teacher', [DocenteController::class, 'update']);
     Route::delete('delete-teacher/{id}', [DocenteController::class, 'destroy']);
 });
