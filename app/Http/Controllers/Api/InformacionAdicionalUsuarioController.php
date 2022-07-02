@@ -18,8 +18,7 @@ class InformacionAdicionalUsuarioController extends Controller
     {
         try {
             $informacion_adicional = InformacionAdicionalUsuario::where('IdUser', Auth::user()->id)->first();
-            // $path = Storage::disk('s3')->url($informacion_adicional->fotografia);
-            $path = "";
+            $path = Storage::disk('s3')->url($informacion_adicional->fotografia);
             return  response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -43,7 +42,8 @@ class InformacionAdicionalUsuarioController extends Controller
             'nombre' => 'required',
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
-
+            'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
+            'firma_capacitando' => 'required',
             'c_Municipio' => 'required',
             'email' => 'required|email',
             'curp' => 'required',
@@ -62,8 +62,7 @@ class InformacionAdicionalUsuarioController extends Controller
             'situacion_laboral' => 'required|numeric',
 
         ]);
-        //'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
-        //'firma_capacitando' => 'required'
+
         try {
             if (Auth::user()->informacion_complementaria == 0) {
                 $folder = "famm";
@@ -80,8 +79,8 @@ class InformacionAdicionalUsuarioController extends Controller
                 $informacion_adicional->localidad = $request->localidad;
                 $informacion_adicional->cp = $request->cp;
 
-                // $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
-                // $informacion_adicional->fotografia = $image_path;
+                $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
+                $informacion_adicional->fotografia = $image_path;
                 $informacion_adicional->c_Municipio = $request->c_Municipio;
                 $informacion_adicional->email = $request->email;
                 $informacion_adicional->curp = $request->curp;
@@ -146,11 +145,11 @@ class InformacionAdicionalUsuarioController extends Controller
                 if ($request->localidad) $informacion_adicional->localidad = $request->localidad;
                 if ($request->cp) $informacion_adicional->cp = $request->cp;
 
-                // if ($request->fotografia) {
-                //     Storage::disk('s3')->delete($informacion_adicional->fotografia);
-                //     $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
-                //     $informacion_adicional->fotografia = $image_path;
-                // }
+                if ($request->fotografia) {
+                    Storage::disk('s3')->delete($informacion_adicional->fotografia);
+                    $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
+                    $informacion_adicional->fotografia = $image_path;
+                }
 
                 if ($request->c_Municipio) $informacion_adicional->c_Municipio = $request->c_Municipio;
                 if ($request->email) $informacion_adicional->email = $request->email;
