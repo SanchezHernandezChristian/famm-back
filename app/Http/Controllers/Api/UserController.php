@@ -20,7 +20,7 @@ class UserController extends Controller
                 ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
                 ->whereNull('users.deleted_at')
                 ->where("users.id", '!=', auth()->user()->id)
-                ->get(["users.id", "nombres", "primer_apellido", "segundo_apellido", "email", "user_name", "users.idRol", "nombre_rol", "created_at"]);
+                ->get(["users.id", "nombres", "primer_apellido", "segundo_apellido", "email", "user_name", "idCentro_capacitacion", "users.idRol", "nombre_rol", "created_at"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -45,7 +45,7 @@ class UserController extends Controller
                 ->leftJoin('c_roles', 'users.idRol', '=', 'c_roles.idRol')
                 ->whereNull('users.deleted_at')
                 ->where("users.id", $id)
-                ->get(["users.id", "nombres", "primer_apellido", "segundo_apellido", "email", "user_name", "users.idRol", "nombre_rol"]);
+                ->get(["users.id", "nombres", "primer_apellido", "segundo_apellido", "email", "user_name", "idCentro_capacitacion", "users.idRol", "nombre_rol"]);
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
@@ -94,6 +94,7 @@ class UserController extends Controller
             $user->primer_apellido = $request->primer_apellido;
             if ($request->segundo_apellido) $user->segundo_apellido = $request->segundo_apellido;
             if ($request->user_name) $user->user_name = $request->user_name;
+            if ($request->idCentro_capacitacion) $user->idCentro_capacitacion = $request->idCentro_capacitacion;
             $user->email = $request->email;
             $user->informacion_complementaria = '0';
             $user->password = Hash::make($request->password);
@@ -157,6 +158,7 @@ class UserController extends Controller
             if ($request->email) $user->email = $request->email;
             if ($request->password) $user->password = Hash::make($request->password);
             if ($request->idRol) $user->idRol = $request->idRol;
+            if ($request->idCentro_capacitacion) $user->idCentro_capacitacion = $request->idCentro_capacitacion;
             $user->save();
             DB::commit();
 
@@ -210,7 +212,7 @@ class UserController extends Controller
         return response()->json([
             "status" => 0,
             "msg" => "Acerca del perfil de usuario",
-            "data" => ["nombres" => auth()->user()->nombres, "primer_apellido" => auth()->user()->primer_apellido, "segundo_apellido" => auth()->user()->segundo_apellido, "user_name" => auth()->user()->user_name, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
+            "data" => ["nombres" => auth()->user()->nombres, "primer_apellido" => auth()->user()->primer_apellido, "segundo_apellido" => auth()->user()->segundo_apellido, "user_name" => auth()->user()->user_name, "idCentro_capacitacion" => auth()->user()->idCentro_capacitacion, "Email" => auth()->user()->email, "Rol" => $rol->nombre_rol]
         ]);
     }
 
