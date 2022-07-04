@@ -176,13 +176,13 @@ class DocenteController extends Controller
                 C_docenteExperiencia::where("idDocente", $request->idDocente)->delete();
             }
 
-            foreach ($request->cursos as $curso) {
+            foreach ($request->experienciaDocente as $_experiencia) {
                 $experiencia = new C_docenteExperiencia();
                 $experiencia->idDocente = $request->idDocente;
-                $experiencia->nombre_curso = $request->nombre_curso;
-                $experiencia->nombre_institucion = $request->nombre_institucion;
-                $experiencia->periodo = $request->periodo;
-                $experiencia->documento = $request->documento;
+                $experiencia->nombre_curso = $_experiencia->nombre_curso;
+                $experiencia->nombre_institucion = $_experiencia->nombre_institucion;
+                $experiencia->periodo = $_experiencia->periodo;
+                $experiencia->documento = $_experiencia->documento;
                 $experiencia->save();
             }
             DB::commit();
@@ -193,13 +193,13 @@ class DocenteController extends Controller
                 C_docenteFormacion::where("idDocente", $request->idDocente)->delete();
             }
 
-            foreach ($request->cursos as $curso) {
+            foreach ($request->formacionDocente as $_formacion) {
                 $formacion = new C_docenteFormacion();
                 $formacion->idDocente = $request->idDocente;
-                $formacion->nombre_curso = $request->nombre_curso;
-                $formacion->nombre_institucion = $request->nombre_institucion;
-                $formacion->periodo = $request->periodo;
-                $formacion->documento = $request->documento;
+                $formacion->nombre_curso = $_formacion->nombre_curso;
+                $formacion->nombre_institucion = $_formacion->nombre_institucion;
+                $formacion->periodo = $_formacion->periodo;
+                $formacion->documento = $_formacion->documento;
                 $formacion->save();
             }
             DB::commit();
@@ -210,12 +210,12 @@ class DocenteController extends Controller
                 C_docenteExperienciaLaboral::where("idDocente", $request->idDocente)->delete();
             }
 
-            foreach ($request->cursos as $curso) {
+            foreach ($request->experienciaLaboral as $_experienciaLaboral) {
                 $experiencia_laboral = new C_docenteExperienciaLaboral();
                 $experiencia_laboral->idDocente = $request->idDocente;
-                $experiencia_laboral->nombre_institucion = $request->nombre_institucion;
-                $experiencia_laboral->puesto = $request->puesto;
-                $experiencia_laboral->periodo = $request->periodo;
+                $experiencia_laboral->nombre_institucion = $_experienciaLaboral->nombre_institucion;
+                $experiencia_laboral->puesto = $_experienciaLaboral->puesto;
+                $experiencia_laboral->periodo = $_experienciaLaboral->periodo;
                 $experiencia_laboral->save();
             }
             DB::commit();
@@ -229,7 +229,7 @@ class DocenteController extends Controller
             foreach ($request->cursos as $curso) {
                 $docente_curso = new C_docenteCurso();
                 $docente_curso->idDocente = $request->idDocente;
-                $docente_curso->idCurso = $request->idCurso;
+                $docente_curso->idCurso = $curso->idCurso;
                 $docente_curso->save();
             }
             DB::commit();
