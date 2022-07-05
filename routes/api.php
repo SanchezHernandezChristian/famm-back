@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CedulaPreautorizacionController;
 use App\Http\Controllers\Api\CentrosdecapacitacionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,14 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::post('create-teacher-p3', [DocenteController::class, 'pagina_2']);
     Route::put('update-teacher', [DocenteController::class, 'update']);
     Route::delete('delete-teacher/{id}', [DocenteController::class, 'destroy']);
+
+    Route::get('all-cedulas', [CedulaPreautorizacionController::class, 'all']);
+    Route::get('get-cedula/{id}', [CedulaPreautorizacionController::class, 'get']);
+    Route::post('create-cedula', [CedulaPreautorizacionController::class, 'create']);
+    Route::put('update-cedula', [CedulaPreautorizacionController::class, 'update']);
+    Route::delete('delete-cedula/{id}', [CedulaPreautorizacionController::class, 'destroy']);
+
+    
 });
 
 Route::get('all-township', [MunicipiosController::class, 'all']);
