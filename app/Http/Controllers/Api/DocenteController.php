@@ -19,12 +19,10 @@ class DocenteController extends Controller
     {
         try {
             $docentes = C_docente::whereNull('deleted_at')->get();
-            $path = Storage::disk('s3')->url($docente->fotografia);
             return  response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
                 "data" =>  $docentes,
-                "pathFoto" => $path,
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
