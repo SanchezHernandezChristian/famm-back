@@ -79,7 +79,7 @@ class CedulaPreautorizacionController extends Controller
     {
         $request->validate([
             'idCurso' => 'required|numeric',
-            'idMunicipio' => 'required|numeric',
+            'idMunicipio' => 'required',
             'idDocente' => 'required|numeric',
             'idEspecialidad' => 'required|numeric',
             'solicitaCurso' => 'required',
