@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CedulaPreautorizacionController;
 use App\Http\Controllers\Api\CentrosdecapacitacionController;
+use App\Http\Controllers\Api\CronogramaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -74,7 +75,10 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::put('update-cedula', [CedulaPreautorizacionController::class, 'update']);
     Route::delete('delete-cedula/{id}', [CedulaPreautorizacionController::class, 'destroy']);
 
-    
+    Route::get('all-cronogramas', [CronogramaController::class, 'all']);
+    Route::get('get-cronograma/{id}', [CronogramaController::class, 'get']);
+    Route::post('create-cronograma', [CronogramaController::class, 'create']);
+    Route::delete('delete-cronograma/{id}', [CronogramaController::class, 'destroy']);
 });
 
 Route::get('all-township', [MunicipiosController::class, 'all']);
