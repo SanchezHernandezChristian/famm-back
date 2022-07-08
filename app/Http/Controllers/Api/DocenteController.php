@@ -74,7 +74,7 @@ class DocenteController extends Controller
             'estatus' => 'required',
             'clave' => 'required',
             'certificado' => 'required',
-            'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
+            
 
             'nombre' => 'required',
             'apellido_paterno' => 'required',
@@ -100,6 +100,7 @@ class DocenteController extends Controller
 
         ]);
 
+        // 'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
         try {
             DB::beginTransaction();
             $docente = new C_docente();
@@ -107,8 +108,8 @@ class DocenteController extends Controller
             $docente->estatus = $request->estatus;
             $docente->clave = $request->clave;
             $docente->certificado = $request->clave;
-            $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
-            $docente->fotografia = $image_path;
+            // $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
+            // $docente->fotografia = $image_path;
 
             $docente->nombre = $request->nombre;
             $docente->apellido_paterno = $request->apellido_paterno;
