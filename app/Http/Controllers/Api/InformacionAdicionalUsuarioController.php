@@ -42,8 +42,7 @@ class InformacionAdicionalUsuarioController extends Controller
             'nombre' => 'required',
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
-            'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
-            'firma_capacitando' => 'required',
+            
             'c_Municipio' => 'required',
             'email' => 'required|email',
             'curp' => 'required',
@@ -63,6 +62,8 @@ class InformacionAdicionalUsuarioController extends Controller
 
         ]);
 
+        // 'fotografia' => 'required|mimes:jpg,png,jpeg|max:1024',
+        //     'firma_capacitando' => 'required',
         try {
             if (Auth::user()->informacion_complementaria == 0) {
                 $folder = "famm";
@@ -79,8 +80,8 @@ class InformacionAdicionalUsuarioController extends Controller
                 $informacion_adicional->localidad = $request->localidad;
                 $informacion_adicional->cp = $request->cp;
 
-                $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
-                $informacion_adicional->fotografia = $image_path;
+                // $image_path = Storage::disk('s3')->put($folder, $request->fotografia, 'public');
+                // $informacion_adicional->fotografia = $image_path;
                 $informacion_adicional->c_Municipio = $request->c_Municipio;
                 $informacion_adicional->email = $request->email;
                 $informacion_adicional->curp = $request->curp;
