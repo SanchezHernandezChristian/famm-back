@@ -107,7 +107,7 @@ class DocenteController extends Controller
             $docente->fecha_ingreso = $request->fecha_ingreso;
             $docente->estatus = $request->estatus;
             $docente->clave = $request->clave;
-            $docente->certificado = $request->clave;
+            $docente->certificado = $request->certificado;
             // $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
             // $docente->fotografia = $image_path;
 
