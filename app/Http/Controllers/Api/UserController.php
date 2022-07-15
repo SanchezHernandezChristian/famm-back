@@ -165,7 +165,7 @@ class UserController extends Controller
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Usuario actualizado!",
+                "mensaje" => "¡Datos actualizados correctamente!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {

@@ -340,7 +340,7 @@ class DocenteController extends Controller
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Información actualizada!",
+                "mensaje" => "¡Datos actualizados correctamente!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {

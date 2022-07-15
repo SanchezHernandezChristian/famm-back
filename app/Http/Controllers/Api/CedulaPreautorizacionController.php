@@ -190,7 +190,7 @@ class CedulaPreautorizacionController extends Controller
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Cedula de preautorizacion actualizada!",
+                "mensaje" => "¡Datos actualizados correctamente!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {

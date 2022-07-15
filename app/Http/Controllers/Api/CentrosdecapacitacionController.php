@@ -105,7 +105,7 @@ class CentrosdecapacitacionController extends Controller
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Centro de capacitación actualizado!",
+                "mensaje" => "¡Datos actualizados correctamente!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {

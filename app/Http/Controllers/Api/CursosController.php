@@ -116,7 +116,7 @@ class CursosController extends Controller
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Curso actualizado!",
+                "mensaje" => "¡Datos actualizados correctamente!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
