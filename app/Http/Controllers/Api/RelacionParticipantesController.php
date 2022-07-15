@@ -3,29 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\C_cursos;
-use App\Models\C_especialidades;
+use App\Models\c_RelacionParticipantes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class EspecialidadController extends Controller
+class RelacionParticipantesController extends Controller
 {
     public function all()
     {
         try {
-
-            $especialidades = DB::connection('mysql')
-                ->table('c_especialidad')
-                ->whereNull('deleted_at')
-                ->get(["idEspecialidad", "nombre_especialidad", "clave_especialidad", "campo_formacion", "subsector", "sector", "created_at"]);
+            $participantes = c_RelacionParticipantes::all();
 
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "especialidades" =>  $especialidades,
+                "data" =>  $participantes,
                 "timeZone" => new Carbon(),
-            ], 200);
+            ], 200);;
         } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
@@ -36,16 +31,17 @@ class EspecialidadController extends Controller
         }
     }
 
-    public function get($id)
+    public function get($idParticipante)
     {
         try {
-            $especialidad = C_especialidades::find($id);
+            $participante = c_RelacionParticipantes::find($idParticipante);
+
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "data" =>  $especialidad,
+                "data" =>  $participante,
                 "timeZone" => new Carbon(),
-            ], 200);
+            ], 200);;
         } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
@@ -59,37 +55,37 @@ class EspecialidadController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'nombre_especialidad' => 'required',
-            'clave_especialidad' => 'required',
-            'campo_formacion' => 'required',
-            'subsector' => 'required',
-            'sector' => 'required',
+            'nombres' => 'required',
+            'apellido_paterno' => 'required',
+            'apellido_materno' => 'required',
+            'sexo' => 'required'
         ]);
 
         try {
             DB::beginTransaction();
-            $especialidad = new C_especialidades();
-            $especialidad->nombre_especialidad = $request->nombre_especialidad;
-            $especialidad->clave_especialidad = $request->clave_especialidad;
-            $especialidad->campo_formacion = $request->campo_formacion;
-            $especialidad->subsector = $request->subsector;
-            $especialidad->sector = $request->sector;
-            $especialidad->save();
+            $participante = new c_RelacionParticipantes();
+            $participante->nombres = $request->nombres;
+            $participante->apellido_paterno = $request->apellido_paterno;
+            $participante->apellido_materno = $request->apellido_materno;
+            $participante->sexo = $request->sexo;
+            if ($request->telefono) $participante->telefono = $request->telefono;
+            if ($request->celular) $participante->celular = $request->celular;
+            $participante->save();
             DB::commit();
 
             return response()->json([
                 "servEstatus" =>  "OK",
                 "serverCode" => "200",
-                "mensaje" => "¡Registro de especialidad exitoso!",
+                "mensaje" => "¡Registro de perticipante exitoso!",
                 "timeZone" => new Carbon(),
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
 
             return response()->json([
-                "servEstatus" =>  "NOT_FOUND",
+                "servEstatus" =>  "ERROR",
                 "serverCode" => "500",
-                "mensaje" =>  "Error en consulta de datos de usuario",
+                "mensaje" =>  $th->getMessage(),
                 "timeZone" => new Carbon(),
             ], 500);
         }
@@ -99,13 +95,14 @@ class EspecialidadController extends Controller
     {
         try {
             DB::beginTransaction();
-            $especialidad = C_especialidades::find($request->id);
-            if ($request->nombre_especialidad) $especialidad->nombre_especialidad = $request->nombre_especialidad;
-            if ($request->clave_especialidad) $especialidad->clave_especialidad = $request->clave_especialidad;
-            if ($request->campo_formacion) $especialidad->campo_formacion = $request->campo_formacion;
-            if ($request->subsector) $especialidad->subsector = $request->subsector;
-            if ($request->sector) $especialidad->sector = $request->sector;
-            $especialidad->save();
+            $participante = c_RelacionParticipantes::find($request->id);
+            if ($request->nombres) $participante->nombres = $request->nombres;
+            if ($request->apellido_paterno) $participante->apellido_paterno = $request->apellido_paterno;
+            if ($request->apellido_materno) $participante->apellido_materno = $request->apellido_materno;
+            if ($request->sexo) $participante->sexo = $request->sexo;
+            if ($request->telefono) $participante->telefono = $request->telefono;
+            if ($request->celular) $participante->celular = $request->celular;
+            $participante->save();
             DB::commit();
 
             return response()->json([
@@ -116,9 +113,8 @@ class EspecialidadController extends Controller
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-
             return response()->json([
-                "servEstatus" =>  "NOT_FOUND",
+                "servEstatus" =>  "ERROR",
                 "serverCode" => "500",
                 "mensaje" =>  $th->getMessage(),
                 "timeZone" => new Carbon(),
@@ -128,30 +124,17 @@ class EspecialidadController extends Controller
 
     public function destroy($id)
     {
-        $msg = "";
-        $code = 0;
-
         try {
             DB::beginTransaction();
-            $cursos = C_cursos::where('idEspecialidad', $id)->whereNull('deleted_at')->get();
-
-            if (isset($cursos[0])) {
-                $code = 403;
-                $msg = "Error: La especialidad ya ha sido asignada a un curso.";
-            } else {
-                $code = 200;
-                $msg = "¡Especialidad eliminada!";
-                $especialidad = C_especialidades::find($id);
-                $especialidad->delete();
-                DB::commit();
-            }
-
+            $participante = c_RelacionParticipantes::find($id);
+            $participante->delete();
+            DB::commit();
             return response()->json([
                 "servEstatus" =>  "OK",
-                "serverCode" => $code,
-                "mensaje" => $msg,
+                "serverCode" => "200",
+                "mensaje" => "¡Participante eliminado!",
                 "timeZone" => new Carbon(),
-            ], $code);
+            ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([

@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\EspecialidadController;
 use App\Http\Controllers\Api\InformacionAdicionalUsuarioController;
 use App\Http\Controllers\Api\MunicipiosController;
 use App\Http\Controllers\Api\PerteneceController;
+use App\Http\Controllers\Api\RelacionParticipantesController;
 use App\Http\Controllers\Api\RolesController;
 
 /*
@@ -79,6 +80,12 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('get-cronograma/{id}', [CronogramaController::class, 'get']);
     Route::post('create-cronograma', [CronogramaController::class, 'create']);
     Route::delete('delete-cronograma/{id}', [CronogramaController::class, 'destroy']);
+
+    Route::get('all-competitor', [RelacionParticipantesController::class, 'all']);
+    Route::get('get-competitor/{id}', [RelacionParticipantesController::class, 'get']);
+    Route::post('create-competitor', [RelacionParticipantesController::class, 'create']);
+    Route::put('update-competitor', [RelacionParticipantesController::class, 'update']);
+    Route::delete('delete-competitor/{id}', [RelacionParticipantesController::class, 'destroy']);
 });
 
 Route::get('all-township', [MunicipiosController::class, 'all']);
