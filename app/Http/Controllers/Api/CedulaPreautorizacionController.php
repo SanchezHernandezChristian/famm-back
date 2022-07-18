@@ -21,8 +21,8 @@ class CedulaPreautorizacionController extends Controller
                 ->leftJoin('c_especialidad', 'preautorizacion_curso.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
                 ->get([
                     "preautorizacion_curso.idCurso", "c_cursos.nombre_curso", "preautorizacion_curso.c_Municipio", "c_municipio.Descripcion", "preautorizacion_curso.idDocente", "c_docente.nombre",
-                    "c_docente.apellido_paterno", "c_docente.apellido_materno", "preautorizacion_curso.idEspecialidad", "c_especialidad.nombre_especialidad", "solicitaCurso", "nombreSolicitaCurso",
-                    "nombreRepresentante", "region", "distrito", "localidad", "sedeCurso", "modalidadCurso", "totalHorasCurso", "costoHora", "costoTotal", "periodoInicio", "periodoTermino",
+                    "c_docente.apellido_paterno", "c_docente.apellido_materno", "preautorizacion_curso.idEspecialidad", "c_especialidad.nombre_especialidad", "preautorizacion_curso.solicitaCurso", "preautorizacion_curso.nombreSolicitaCurso",
+                    "preautorizacion_curso.nombreRepresentante", "preautorizacion_curso.region", "preautorizacion_curso.distrito", "preautorizacion_curso.localidad", "sedeCurso", "modalidadCurso", "totalHorasCurso", "costoHora", "costoTotal", "periodoInicio", "periodoTermino",
                     "totalDiasCapacitacion", "accionMovil", "totalHorasSemana", "grupoEtnico", "totalInscritos", "totalHombres", "totalMujeres", "preautorizacion_curso.created_at"
                 ]);
 
@@ -54,8 +54,8 @@ class CedulaPreautorizacionController extends Controller
                 ->where("preautorizacion_curso.id", '==', $id)
                 ->get([
                     "preautorizacion_curso.idCurso", "c_cursos.nombre_curso", "preautorizacion_curso.c_Municipio", "c_municipio.Descripcion", "preautorizacion_curso.idDocente", "c_docente.nombre",
-                    "c_docente.apellido_paterno", "c_docente.apellido_materno", "preautorizacion_curso.idEspecialidad", "c_especialidad.nombre_especialidad", "solicitaCurso", "nombreSolicitaCurso",
-                    "nombreRepresentante", "region", "distrito", "localidad", "sedeCurso", "modalidadCurso", "totalHorasCurso", "costoHora", "costoTotal", "periodoInicio", "periodoTermino",
+                    "c_docente.apellido_paterno", "c_docente.apellido_materno", "preautorizacion_curso.idEspecialidad", "c_especialidad.nombre_especialidad", "preautorizacion_curso.solicitaCurso", "preautorizacion_curso.nombreSolicitaCurso",
+                    "preautorizacion_curso.nombreRepresentante", "preautorizacion_curso.region", "preautorizacion_curso.distrito", "preautorizacion_curso.localidad", "sedeCurso", "modalidadCurso", "totalHorasCurso", "costoHora", "costoTotal", "periodoInicio", "periodoTermino",
                     "totalDiasCapacitacion", "accionMovil", "totalHorasSemana", "grupoEtnico", "totalInscritos", "totalHombres", "totalMujeres", "preautorizacion_curso.created_at"
                 ]);
 
