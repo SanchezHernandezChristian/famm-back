@@ -13,18 +13,7 @@ class CedulaPreautorizacionController extends Controller
     public function all()
     {
         try {
-            $cedula_preautorizacion = DB::connection('mysql')
-                ->table('preautorizacion_curso')
-                ->leftJoin('c_cursos', 'preautorizacion_curso.idCurso', '=', 'c_cursos.idCurso')
-                ->leftJoin('c_municipio', 'preautorizacion_curso.c_Municipio', '=', 'c_municipio.c_Municipio')
-                ->leftJoin('c_docente', 'preautorizacion_curso.idDocente', '=', 'c_docente.idDocente')
-                ->leftJoin('c_especialidad', 'preautorizacion_curso.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
-                ->get([
-                    "preautorizacion_curso.idCurso", "c_cursos.nombre_curso", "preautorizacion_curso.c_Municipio", "c_municipio.Descripcion", "preautorizacion_curso.idDocente", "c_docente.nombre",
-                    "c_docente.apellido_paterno", "c_docente.apellido_materno", "preautorizacion_curso.idEspecialidad", "c_especialidad.nombre_especialidad", "preautorizacion_curso.solicitaCurso", "preautorizacion_curso.nombreSolicitaCurso",
-                    "preautorizacion_curso.nombreRepresentante", "preautorizacion_curso.region", "preautorizacion_curso.distrito", "preautorizacion_curso.localidad", "sedeCurso", "modalidadCurso", "totalHorasCurso", "costoHora", "costoTotal", "periodoInicio", "periodoTermino",
-                    "totalDiasCapacitacion", "accionMovil", "totalHorasSemana", "grupoEtnico", "totalInscritos", "totalHombres", "totalMujeres", "preautorizacion_curso.created_at"
-                ]);
+            $cedula_preautorizacion = C_cedulaPreautorizacion::all();
 
             return response()->json([
                 "servEstatus" =>  "OK",
@@ -45,19 +34,7 @@ class CedulaPreautorizacionController extends Controller
     public function get($id)
     {
         try {
-            $cedula_preautorizacion = DB::connection('mysql')
-                ->table('preautorizacion_curso')
-                ->leftJoin('c_cursos', 'preautorizacion_curso.idCurso', '=', 'c_cursos.idCurso')
-                ->leftJoin('c_municipio', 'preautorizacion_curso.c_Municipio', '=', 'c_municipio.c_Municipio')
-                ->leftJoin('c_docente', 'preautorizacion_curso.idDocente', '=', 'c_docente.idDocente')
-                ->leftJoin('c_especialidad', 'preautorizacion_curso.idEspecialidad', '=', 'c_especialidad.idEspecialidad')
-                ->where("preautorizacion_curso.id", '==', $id)
-                ->get([
-                    "preautorizacion_curso.idCurso", "c_cursos.nombre_curso", "preautorizacion_curso.c_Municipio", "c_municipio.Descripcion", "preautorizacion_curso.idDocente", "c_docente.nombre",
-                    "c_docente.apellido_paterno", "c_docente.apellido_materno", "preautorizacion_curso.idEspecialidad", "c_especialidad.nombre_especialidad", "preautorizacion_curso.solicitaCurso", "preautorizacion_curso.nombreSolicitaCurso",
-                    "preautorizacion_curso.nombreRepresentante", "preautorizacion_curso.region", "preautorizacion_curso.distrito", "preautorizacion_curso.localidad", "sedeCurso", "modalidadCurso", "totalHorasCurso", "costoHora", "costoTotal", "periodoInicio", "periodoTermino",
-                    "totalDiasCapacitacion", "accionMovil", "totalHorasSemana", "grupoEtnico", "totalInscritos", "totalHombres", "totalMujeres", "preautorizacion_curso.created_at"
-                ]);
+            $cedula_preautorizacion = C_cedulaPreautorizacion::find($id);
 
             return response()->json([
                 "servEstatus" =>  "OK",
