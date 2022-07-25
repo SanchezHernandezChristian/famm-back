@@ -68,10 +68,8 @@ class CronogramaController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'nombre_curso' => 'required',
+            'idCurso' => 'required',
             'tipo_curso' => 'required',
-            'valido_curso' => 'required',
-            'elaboro_curso' => 'required',
             'encargado_curso' => 'required',
             'contenido_cronograma' => 'required',
         ]);
@@ -81,10 +79,8 @@ class CronogramaController extends Controller
             DB::beginTransaction();
             $cronograma = new C_cronograma();
             $cronograma->idDocente = auth()->user()->id;
-            $cronograma->nombre_curso = $request->nombre_curso;
+            $cronograma->idCurso = $request->idCurso;
             $cronograma->tipo_curso = $request->tipo_curso;
-            $cronograma->valido_curso = $request->valido_curso;
-            $cronograma->elaboro_curso = $request->elaboro_curso;
             $cronograma->encargado_curso = $request->encargado_curso;
             $cronograma->save();
             DB::commit();
@@ -101,6 +97,48 @@ class CronogramaController extends Controller
                 $temario->save();
             }
             DB::commit();
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" => "¡Registro exitoso!",
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json([
+                "servEstatus" =>  "NOT_FOUND",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $cronograma = C_cronograma::find($request->idCronograma);
+            if ($request->idCurso) $cronograma->idCurso = $request->idCurso;
+            if ($request->tipo_curso) $cronograma->tipo_curso = $request->tipo_curso;
+            if ($request->encargado_curso) $cronograma->encargado_curso = $request->encargado_curso;
+            $cronograma->save();
+            DB::commit();
+
+            // DB::beginTransaction();
+            // foreach ($request->contenido_cronograma as $contenido) {
+            //     $temario = new C_contenidoCronograma();
+            //     $temario->idCronograma = $cronograma->idCronograma;
+            //     $temario->unidad = $contenido["unidad"];
+            //     $temario->tema = $contenido["tema"];
+            //     $temario->subtema = $contenido["subtema"];
+            //     $temario->horas = $contenido["horas"];
+            //     $temario->periodo = $contenido["periodo"];
+            //     $temario->save();
+            // }
+            // DB::commit();
 
             return response()->json([
                 "servEstatus" =>  "OK",
