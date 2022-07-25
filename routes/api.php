@@ -79,6 +79,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('all-cronogramas', [CronogramaController::class, 'all']);
     Route::get('get-cronograma/{id}', [CronogramaController::class, 'get']);
     Route::post('create-cronograma', [CronogramaController::class, 'create']);
+    Route::put('update-cronograma', [CronogramaController::class, 'update']);
     Route::delete('delete-cronograma/{id}', [CronogramaController::class, 'destroy']);
 
     Route::get('all-competitor', [RelacionParticipantesController::class, 'all']);
