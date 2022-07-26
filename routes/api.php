@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DiscapacidadController;
 use App\Http\Controllers\Api\DocenteController;
 use App\Http\Controllers\Api\EscolaridadController;
 use App\Http\Controllers\Api\EspecialidadController;
+use App\Http\Controllers\Api\FactibilidadYJustificacionCursosController;
 use App\Http\Controllers\Api\InformacionAdicionalUsuarioController;
 use App\Http\Controllers\Api\MunicipiosController;
 use App\Http\Controllers\Api\PerteneceController;
@@ -87,6 +88,12 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::post('create-competitor', [RelacionParticipantesController::class, 'create']);
     Route::put('update-competitor', [RelacionParticipantesController::class, 'update']);
     Route::delete('delete-competitor/{id}', [RelacionParticipantesController::class, 'destroy']);
+
+    Route::get('all-factibility', [FactibilidadYJustificacionCursosController::class, 'all']);
+    Route::get('get-factibility/{id}', [FactibilidadYJustificacionCursosController::class, 'get']);
+    Route::post('create-factibility', [FactibilidadYJustificacionCursosController::class, 'create']);
+    Route::put('update-factibility', [FactibilidadYJustificacionCursosController::class, 'update']);
+    Route::delete('delete-factibility/{id}', [FactibilidadYJustificacionCursosController::class, 'destroy']);
 });
 
 Route::get('all-township', [MunicipiosController::class, 'all']);
