@@ -31,6 +31,26 @@ class CedulaPreautorizacionController extends Controller
         }
     }
 
+    public function allValid()
+    {
+        try {
+            $cedula_preautorizacion = C_cedulaPreautorizacion::where('esValido', 1)->get();
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "data" =>  $cedula_preautorizacion,
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
     public function get($id)
     {
         try {
@@ -108,7 +128,7 @@ class CedulaPreautorizacionController extends Controller
             $cedula_preautorizacion->totalInscritos = $request->totalInscritos;
             $cedula_preautorizacion->totalHombres = $request->totalHombres;
             $cedula_preautorizacion->totalMujeres = $request->totalMujeres;
-
+            $cedula_preautorizacion->esValido = 0;
             $cedula_preautorizacion->save();
             DB::commit();
 
@@ -160,7 +180,7 @@ class CedulaPreautorizacionController extends Controller
             if ($request->totalInscritos) $cedula_preautorizacion->totalInscritos = $request->totalInscritos;
             if ($request->totalHombres) $cedula_preautorizacion->totalHombres = $request->totalHombres;
             if ($request->totalMujeres) $cedula_preautorizacion->totalMujeres = $request->totalMujeres;
-
+            if ($request->esValido) $cedula_preautorizacion->esValido = $request->esValido;
             $cedula_preautorizacion->save();
             DB::commit();
 

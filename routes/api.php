@@ -71,6 +71,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::put('update-teacher', [DocenteController::class, 'update']);
     Route::delete('delete-teacher/{id}', [DocenteController::class, 'destroy']);
 
+    Route::get('all-valid-cedulas', [CedulaPreautorizacionController::class, 'allValid']);
     Route::get('all-cedulas', [CedulaPreautorizacionController::class, 'all']);
     Route::get('get-cedula/{id}', [CedulaPreautorizacionController::class, 'get']);
     Route::post('create-cedula', [CedulaPreautorizacionController::class, 'create']);
