@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use App\Models\C_cursos;
+use App\Models\C_cursoUnidad;
 
 class CursosController extends Controller
 {
@@ -145,6 +146,91 @@ class CursosController extends Controller
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
+    public function assign(Request $request)
+    {
+        $request->validate([
+            'idCurso' => 'required',
+            'idUnidad' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $curso = new C_cursoUnidad();
+            $curso->idCurso = $request->idCurso;
+            $curso->idUnidad = $request->idUnidad;
+            $curso->save();
+            DB::commit();
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "mensaje" => "¡Asignación de curso exitoso!",
+                "timeZone" => new Carbon(),
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json([
+                "servEstatus" =>  "NOT_FOUND",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+    public function allAssign(Request $request)
+    {
+        try {
+            $cursosUnidad = DB::connection('mysql')
+                ->table('c_cursos')
+                ->rightJoin('curso_unidad', 'c_cursos.idCurso', '=', 'curso_unidad.idCurso')
+                ->leftJoin('c_centrosdecapacitacion', 'c_centrosdecapacitacion.id', '=', 'curso_unidad.idUnidad')
+                ->whereNull('c_cursos.deleted_at')
+                ->get(['c_cursos.idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'idUnidad', 'c_centrosdecapacitacion.id',  'c_centrosdecapacitacion.nombre']);
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "cursos" =>  $cursosUnidad,
+                "timeZone" => new Carbon(),
+            ], 200);;
+        } catch (\Throwable $th) {
+            return response()->json([
+                "servEstatus" =>  "ERROR",
+                "serverCode" => "500",
+                "mensaje" =>  $th->getMessage(),
+                "timeZone" => new Carbon(),
+            ], 500);
+        }
+    }
+
+    public function allAssignByCenter($id)
+    {
+        try {
+            $cursosUnidad = DB::connection('mysql')
+                ->table('c_cursos')
+                ->rightJoin('curso_unidad', 'c_cursos.idCurso', '=', 'curso_unidad.idCurso')
+                ->leftJoin('c_centrosdecapacitacion', 'c_centrosdecapacitacion.id', '=', 'curso_unidad.idUnidad')
+                ->whereNull('c_cursos.deleted_at')
+                ->where('c_centrosdecapacitacion.id', '=', $id)
+                ->get(['c_cursos.idCurso', 'nombre_curso', 'duracion_horas', 'clave_curso', 'descripcion_curso', 'idUnidad', 'c_centrosdecapacitacion.id',  'c_centrosdecapacitacion.nombre']);
+
+            return response()->json([
+                "servEstatus" =>  "OK",
+                "serverCode" => "200",
+                "cursos" =>  $cursosUnidad,
+                "timeZone" => new Carbon(),
+            ], 200);;
+        } catch (\Throwable $th) {
             return response()->json([
                 "servEstatus" =>  "ERROR",
                 "serverCode" => "500",
