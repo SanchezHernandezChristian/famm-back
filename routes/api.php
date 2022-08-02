@@ -45,6 +45,9 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::put('update-grade', [CursosController::class, 'update']);
     Route::get('get-grade/{clave_curso}', [CursosController::class, 'get']);
     Route::delete('delete-grade/{id}', [CursosController::class, 'destroy']);
+    Route::post('assign-grade', [CursosController::class, 'assign']);
+    Route::get('all-assign-grade', [CursosController::class, 'allAssign']);
+    Route::get('all-assign-grade/{idCenter}', [CursosController::class, 'allAssignByCenter']);
 
     Route::post('additional-user-information', [InformacionAdicionalUsuarioController::class, 'create']);
     Route::put('update-additional-user-information', [InformacionAdicionalUsuarioController::class, 'update']);
