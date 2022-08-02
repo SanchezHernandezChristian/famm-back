@@ -74,7 +74,7 @@ class DocenteController extends Controller
             'estatus' => 'required',
             'clave' => 'required',
             'certificado' => 'required',
-            
+
 
             'nombre' => 'required',
             'apellido_paterno' => 'required',
@@ -132,6 +132,7 @@ class DocenteController extends Controller
             $docente->curp = $request->curp;
             $docente->numero_registro = $request->numero_registro;
             $docente->idEscolaridad = $request->idEscolaridad;
+            $docente->esValido = 0;
 
             $docente->save();
             DB::commit();
@@ -298,10 +299,10 @@ class DocenteController extends Controller
             if ($request->clave) $docente->clave = $request->clave;
             if ($request->certificado) $docente->certificado = $request->clave;
 
-            if ($request->fotografia) {
-                $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
-                $docente->fotografia = $image_path;
-            }
+            // if ($request->fotografia) {
+            //     $image_path = Storage::disk('s3')->put("famm", $request->fotografia, 'public');
+            //     $docente->fotografia = $image_path;
+            // }
 
             if ($request->nombre) $docente->nombre = $request->nombre;
             if ($request->apellido_paterno) $docente->apellido_paterno = $request->apellido_paterno;
@@ -324,18 +325,19 @@ class DocenteController extends Controller
             if ($request->curp) $docente->curp = $request->curp;
             if ($request->numero_registro) $docente->numero_registro = $request->numero_registro;
             if ($request->idEscolaridad) $docente->idEscolaridad = $request->idEscolaridad;
+            if ($request->esValido) $docente->esValido = $request->esValido;
             $docente->save();
 
             DB::commit();
 
-            if ($request->idEscolaridad) {
-                DB::beginTransaction();
-                //Aqui se inserta el documento 
-                $docente_documento = C_docenteDocumento::where(["idDocente" => $request->id, "tipo_comprobante" => "comprobante_estudios"]);
-                $doc_path = Storage::disk('s3')->put("famm-docs", $request->documento_obtenido, 'public');
-                $docente_documento->path = $doc_path;
-                DB::commit();
-            }
+            // if ($request->idEscolaridad) {
+            //     DB::beginTransaction();
+            //     //Aqui se inserta el documento 
+            //     $docente_documento = C_docenteDocumento::where(["idDocente" => $request->id, "tipo_comprobante" => "comprobante_estudios"]);
+            //     $doc_path = Storage::disk('s3')->put("famm-docs", $request->documento_obtenido, 'public');
+            //     $docente_documento->path = $doc_path;
+            //     DB::commit();
+            // }
 
             return response()->json([
                 "servEstatus" =>  "OK",
